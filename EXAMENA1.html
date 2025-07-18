@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen de Gramática - Nivel A1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #2d3436;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4bbd57 0%, #00a085 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .school-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            background: white;
+            padding: 5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .school-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .question-container {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-left: 4px solid #00b894;
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .question-number {
+            background: #00b894;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #2d3436;
+        }
+
+        .options {
+            display: grid;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .option {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            border-color: #00b894;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 184, 148, 0.1);
+        }
+
+        .option.selected {
+            border-color: #00b894;
+            background: #e8f5f3;
+        }
+
+        .option.correct {
+            border-color: #00b894;
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .option.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .option-letter {
+            background: #6c757d;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .option.correct .option-letter {
+            background: #28a745;
+        }
+
+        .option.incorrect .option-letter {
+            background: #dc3545;
+        }
+
+        .hint {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .hint.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hint-icon {
+            color: #856404;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .progress-bar {
+            background: #e9ecef;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #00b894, #00a085);
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: #2d3436;
+        }
+
+        .score-good {
+            color: #28a745;
+        }
+
+        .score-bad {
+            color: #dc3545;
+        }
+
+        .next-btn {
+            background: #00b894;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 20px auto 0;
+        }
+
+        .next-btn:hover {
+            background: #00a085;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 184, 148, 0.3);
+        }
+
+        .next-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .final-score {
+            text-align: center;
+            padding: 40px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .final-score h2 {
+            color: #2d3436;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .restart-btn {
+            background: #00b894;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .restart-btn:hover {
+            background: #00a085;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 184, 148, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div >
+                <img  width="150" height="150" src="./Atanasio_Girardot.png" alt="Escudo Institución Atanasio Girardot">
+            </div>
+            <h1>INSTITUCIÓN ATANASIO GIRARDOT</h1>
+            <p>Examen de Gramática - Nivel A1</p>
+        </div>
+
+        <div class="content">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            
+            <div class="score" id="score">Puntuación: 0/10</div>
+            
+            <div id="questionContainer">
+                <!-- Las preguntas se cargarán aquí -->
+            </div>
+            
+            <div id="finalScore" class="final-score" style="display: none;">
+                <h2>¡Examen Completado!</h2>
+                <p id="finalScoreText"></p>
+                <button class="restart-btn" onclick="restartQuiz()">Reiniciar Examen</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+           const questions = [
+            {
+                question: "I ___ a student.",
+                options: ["am", "is", "are", "be"],
+                correct: 0,
+                hint: "Pista: Con 'I' (yo) siempre usamos 'am'. Es la forma del verbo 'to be' para primera persona singular."
+            },
+            {
+                question: "She ___ my sister.",
+                options: ["am", "is", "are", "be"],
+                correct: 1,
+                hint: "Pista: Con 'She' (ella) usamos 'is'. Es la forma del verbo 'to be' para tercera persona singular."
+            },
+            {
+                question: "Choose the correct article: I have ___ apple.",
+                options: ["a", "an", "the", "no article"],
+                correct: 1,
+                hint: "Pista: Usamos 'an' antes de palabras que empiezan con sonido vocal. 'Apple' empieza con 'a' (sonido vocal)."
+            },
+            {
+                question: "This is ___ book. (possessive adjective for 'I')",
+                options: ["me", "my", "mine", "I"],
+                correct: 1,
+                hint: "Pista: Los adjetivos posesivos van antes del sustantivo. 'My' es el adjetivo posesivo de 'I'."
+            },
+            {
+                question: "They ___ at home.",
+                options: ["am", "is", "are", "be"],
+                correct: 2,
+                hint: "Pista: Con 'They' (ellos/ellas) usamos 'are'. Es la forma del verbo 'to be' para tercera persona plural."
+            },
+            {
+                question: "I ___ like coffee.",
+                options: ["doesn't", "don't", "not", "no"],
+                correct: 1,
+                hint: "Pista: Para negar con 'I' en presente simple, usamos 'don't' (do not). 'Doesn't' es solo para tercera persona singular."
+            },
+            {
+                question: "___ you speak English?",
+                options: ["Are", "Do", "Does", "Is"],
+                correct: 1,
+                hint: "Pista: Para hacer preguntas con 'you' en presente simple, usamos 'Do'. 'Does' es solo para tercera persona singular."
+            },
+            {
+                question: "He ___ to school every day.",
+                options: ["go", "goes", "going", "went"],
+                correct: 1,
+                hint: "Pista: En presente simple, con 'he/she/it' añadimos 's' al verbo. 'Go' se convierte en 'goes'."
+            },
+            {
+                question: "There ___ two cats in the garden.",
+                options: ["is", "are", "am", "be"],
+                correct: 1,
+                hint: "Pista: Con 'there' seguido de plural ('cats'), usamos 'are'. 'There are' para plural, 'there is' para singular."
+            },
+            {
+                question: "___ is your name?",
+                options: ["How", "What", "Where", "When"],
+                correct: 1,
+                hint: "Pista: Para preguntar por el nombre usamos 'What'. 'What is your name?' es la forma correcta."
+            },
+            {
+                question: "We ___ happy.",
+                options: ["am", "is", "are", "be"],
+                correct: 2,
+                hint: "Pista: Con 'We' (nosotros) usamos 'are'. Es la forma del verbo 'to be' para primera persona plural."
+            },
+            {
+                question: "___ book is red.",
+                options: ["This", "These", "That", "Those"],
+                correct: 0,
+                hint: "Pista: 'This' se usa para objetos singulares que están cerca. 'Book' es singular."
+            },
+            {
+                question: "I have ___ car.",
+                options: ["a", "an", "the", "no article"],
+                correct: 0,
+                hint: "Pista: Usamos 'a' antes de palabras que empiezan con sonido consonante. 'Car' empieza con 'c' (sonido consonante)."
+            },
+            {
+                question: "It ___ cold today.",
+                options: ["am", "is", "are", "be"],
+                correct: 1,
+                hint: "Pista: Con 'It' usamos 'is'. Es la forma del verbo 'to be' para tercera persona singular."
+            },
+            {
+                question: "___ are my friends.",
+                options: ["This", "These", "That", "Those"],
+                correct: 1,
+                hint: "Pista: 'These' se usa para objetos plurales que están cerca. 'Friends' es plural."
+            },
+            {
+                question: "She ___ work on Sundays.",
+                options: ["doesn't", "don't", "not", "no"],
+                correct: 0,
+                hint: "Pista: Para negar con 'she' en presente simple, usamos 'doesn't' (does not). Con tercera persona singular usamos 'doesn't'."
+            },
+            {
+                question: "___ he like pizza?",
+                options: ["Are", "Do", "Does", "Is"],
+                correct: 2,
+                hint: "Pista: Para hacer preguntas con 'he' en presente simple, usamos 'Does'. Con tercera persona singular usamos 'Does'."
+            },
+            {
+                question: "My mother ___ very kind.",
+                options: ["am", "is", "are", "be"],
+                correct: 1,
+                hint: "Pista: 'My mother' es tercera persona singular (she), por lo tanto usamos 'is'."
+            },
+            {
+                question: "I ___ a teacher.",
+                options: ["am not", "is not", "are not", "be not"],
+                correct: 0,
+                hint: "Pista: Para negar con 'I' y el verbo 'to be', usamos 'am not'. También se puede contraer como 'I'm not'."
+            },
+            {
+                question: "___ old are you?",
+                options: ["How", "What", "Where", "When"],
+                correct: 0,
+                hint: "Pista: Para preguntar por la edad usamos 'How old'. 'How old are you?' significa '¿Cuántos años tienes?'"
+            },
+            {
+                question: "There ___ a book on the table.",
+                options: ["is", "are", "am", "be"],
+                correct: 0,
+                hint: "Pista: Con 'there' seguido de singular ('a book'), usamos 'is'. 'There is' para singular."
+            },
+            {
+                question: "I ___ from Colombia.",
+                options: ["am", "is", "are", "be"],
+                correct: 0,
+                hint: "Pista: Con 'I' siempre usamos 'am' cuando hablamos de origen o nacionalidad."
+            },
+            {
+                question: "___ you have a pen?",
+                options: ["Are", "Do", "Does", "Is"],
+                correct: 1,
+                hint: "Pista: Para preguntar con el verbo 'have' y 'you', usamos 'Do'. 'Do you have...?' es la forma correcta."
+            },
+            {
+                question: "The cat ___ on the chair.",
+                options: ["am", "is", "are", "be"],
+                correct: 1,
+                hint: "Pista: 'The cat' es tercera persona singular (it), por lo tanto usamos 'is'."
+            },
+            {
+                question: "I ___ English every day.",
+                options: ["study", "studies", "studying", "studied"],
+                correct: 0,
+                hint: "Pista: En presente simple, con 'I' usamos la forma base del verbo sin agregar 's'. 'I study' es correcto."
+            },
+            {
+                question: "___ are you from?",
+                options: ["How", "What", "Where", "When"],
+                correct: 2,
+                hint: "Pista: Para preguntar por el lugar de origen usamos 'Where'. 'Where are you from?' significa '¿De dónde eres?'"
+            },
+            {
+                question: "This is ___ house. (possessive adjective for 'we')",
+                options: ["us", "our", "ours", "we"],
+                correct: 1,
+                hint: "Pista: Los adjetivos posesivos van antes del sustantivo. 'Our' es el adjetivo posesivo de 'we'."
+            },
+            {
+                question: "She ___ to music.",
+                options: ["listen", "listens", "listening", "listened"],
+                correct: 1,
+                hint: "Pista: En presente simple, con 'she' añadimos 's' al verbo. 'Listen' se convierte en 'listens'."
+            },
+            {
+                question: "___ dogs are black.",
+                options: ["This", "These", "That", "Those"],
+                correct: 3,
+                hint: "Pista: 'Those' se usa para objetos plurales que están lejos. 'Dogs' es plural y están lejos."
+            },
+            {
+                question: "You ___ my best friend.",
+                options: ["am", "is", "are", "be"],
+                correct: 2,
+                hint: "Pista: Con 'You' (tú/usted) usamos 'are'. Es la forma del verbo 'to be' para segunda persona."
+            },
+            {
+                question: "I have ___ orange.",
+                options: ["a", "an", "the", "no article"],
+                correct: 1,
+                hint: "Pista: Usamos 'an' antes de palabras que empiezan con sonido vocal. 'Orange' empieza con 'o' (sonido vocal)."
+            },
+            {
+                question: "My father ___ very tall.",
+                options: ["am", "is", "are", "be"],
+                correct: 1,
+                hint: "Pista: 'My father' es tercera persona singular (he), por lo tanto usamos 'is'."
+            },
+            {
+                question: "___ do you live?",
+                options: ["How", "What", "Where", "When"],
+                correct: 2,
+                hint: "Pista: Para preguntar por el lugar donde vives usamos 'Where'. 'Where do you live?' significa '¿Dónde vives?'"
+            },
+            {
+                question: "We ___ students.",
+                options: ["am", "is", "are", "be"],
+                correct: 2,
+                hint: "Pista: Con 'We' (nosotros) usamos 'are'. Es la forma del verbo 'to be' para primera persona plural."
+            },
+            {
+                question: "She ___ have a car.",
+                options: ["doesn't", "don't", "not", "no"],
+                correct: 0,
+                hint: "Pista: Para negar con 'she' y el verbo 'have', usamos 'doesn't have'. Con tercera persona singular usamos 'doesn't'."
+            },
+            {
+                question: "___ time is it?",
+                options: ["How", "What", "Where", "When"],
+                correct: 1,
+                hint: "Pista: Para preguntar la hora usamos 'What time'. 'What time is it?' significa '¿Qué hora es?'"
+            },
+            {
+                question: "The children ___ in the park.",
+                options: ["am", "is", "are", "be"],
+                correct: 2,
+                hint: "Pista: 'The children' es plural (they), por lo tanto usamos 'are'."
+            },
+            {
+                question: "I ___ TV every night.",
+                options: ["watch", "watches", "watching", "watched"],
+                correct: 0,
+                hint: "Pista: En presente simple, con 'I' usamos la forma base del verbo sin agregar 's'. 'I watch' es correcto."
+            },
+            {
+                question: "This is ___ car. (possessive adjective for 'he')",
+                options: ["him", "his", "he", "he's"],
+                correct: 1,
+                hint: "Pista: Los adjetivos posesivos van antes del sustantivo. 'His' es el adjetivo posesivo de 'he'."
+            },
+            {
+                question: "___ she work here?",
+                options: ["Are", "Do", "Does", "Is"],
+                correct: 2,
+                hint: "Pista: Para hacer preguntas con 'she' y el verbo 'work', usamos 'Does'. Con tercera persona singular usamos 'Does'."
+            },
+            {
+                question: "I can ___ English.",
+                options: ["speak", "speaks", "speaking", "spoke"],
+                correct: 0,
+                hint: "Pista: Después de 'can' usamos el infinitivo sin 'to'. 'I can speak' es correcto."
+            },
+            {
+                question: "___ you swim?",
+                options: ["Are", "Do", "Can", "Is"],
+                correct: 2,
+                hint: "Pista: Para preguntar sobre habilidades usamos 'Can'. 'Can you swim?' significa '¿Sabes nadar?'"
+            },
+            {
+                question: "He ___ play football.",
+                options: ["can't", "don't", "doesn't", "not"],
+                correct: 0,
+                hint: "Pista: Para negar con 'can', usamos 'can't' (cannot). 'He can't play' es correcto."
+            },
+            {
+                question: "I ___ breakfast at 7 AM.",
+                options: ["have", "has", "having", "had"],
+                correct: 0,
+                hint: "Pista: En presente simple, con 'I' usamos la forma base del verbo. 'I have' es correcto."
+            },
+            {
+                question: "She ___ breakfast at 8 AM.",
+                options: ["have", "has", "having", "had"],
+                correct: 1,
+                hint: "Pista: En presente simple, con 'she' añadimos 's' al verbo. 'Have' se convierte en 'has'."
+            },
+            {
+                question: "___ is your favorite color?",
+                options: ["How", "What", "Where", "When"],
+                correct: 1,
+                hint: "Pista: Para preguntar por algo específico usamos 'What'. 'What is your favorite color?' es correcto."
+            },
+            {
+                question: "The book is ___ the table.",
+                options: ["in", "on", "at", "under"],
+                correct: 1,
+                hint: "Pista: Para objetos que están encima de superficies usamos 'on'. 'On the table' es correcto."
+            },
+            {
+                question: "I live ___ Medellín.",
+                options: ["in", "on", "at", "under"],
+                correct: 0,
+                hint: "Pista: Para ciudades usamos 'in'. 'I live in Medellín' es correcto."
+            },
+            {
+                question: "We ___ at school.",
+                options: ["am", "is", "are", "be"],
+                correct: 2,
+                hint: "Pista: Con 'We' usamos 'are'. También para lugares específicos usamos 'at'."
+            },
+            {
+                question: "This is ___ bag. (possessive adjective for 'she')",
+                options: ["she", "her", "hers", "she's"],
+                correct: 1,
+                hint: "Pista: Los adjetivos posesivos van antes del sustantivo. 'Her' es el adjetivo posesivo de 'she'."
+            },
+            {
+                question: "___ do you go to school?",
+                options: ["How", "What", "Where", "When"],
+                correct: 0,
+                hint: "Pista: Para preguntar por el método o manera usamos 'How'. 'How do you go to school?' pregunta por el transporte."
+            },
+            {
+                question: "They ___ soccer every weekend.",
+                options: ["play", "plays", "playing", "played"],
+                correct: 0,
+                hint: "Pista: En presente simple, con 'they' usamos la forma base del verbo sin agregar 's'. 'They play' es correcto."
+            },
+            {
+                question: "I ___ 15 years old.",
+                options: ["am", "is", "are", "have"],
+                correct: 0,
+                hint: "Pista: Para la edad en inglés usamos el verbo 'to be', no 'have'. 'I am 15 years old' es correcto."
+            },
+            {
+                question: "___ books are these?",
+                options: ["Who", "What", "Whose", "Where"],
+                correct: 2,
+                hint: "Pista: Para preguntar por el propietario usamos 'Whose'. 'Whose books are these?' significa '¿De quién son estos libros?'"
+            },
+            {
+                question: "The dog is ___ the house.",
+                options: ["in", "on", "at", "between"],
+                correct: 0,
+                hint: "Pista: Para espacios cerrados usamos 'in'. 'In the house' significa 'dentro de la casa'."
+            },
+            {
+                question: "I go to bed ___ 10 PM.",
+                options: ["in", "on", "at", "under"],
+                correct: 2,
+                hint: "Pista: Para horas específicas usamos 'at'. 'At 10 PM' es correcto."
+            },
+            {
+                question: "___ often do you read?",
+                options: ["How", "What", "Where", "When"],
+                correct: 0,
+                hint: "Pista: Para preguntar por frecuencia usamos 'How often'. 'How often do you read?' pregunta por la frecuencia."
+            },
+            {
+                question: "She ___ very beautiful.",
+                options: ["am", "is", "are", "have"],
+                correct: 1,
+                hint: "Pista: Para describir características usamos el verbo 'to be'. 'She is beautiful' es correcto."
+            },
+            {
+                question: "We ___ hungry.",
+                options: ["am", "is", "are", "have"],
+                correct: 2,
+                hint: "Pista: Para estados o sentimientos usamos 'to be'. 'We are hungry' es correcto."
+            },
+            {
+                question: "___ your phone number?",
+                options: ["How is", "What is", "Where is", "When is"],
+                correct: 1,
+                hint: "Pista: Para preguntar por información específica usamos 'What is'. 'What is your phone number?' es correcto."
+            },
+            {
+                question: "The cats ___ sleeping.",
+                options: ["am", "is", "are", "have"],
+                correct: 2,
+                hint: "Pista: 'The cats' es plural (they), por lo tanto usamos 'are'."
+            },
+            {
+                question: "___ she work here?",
+                options: ["Are", "Do", "Does", "Is"],
+                correct: 2,
+                hint: "Pista: Para hacer preguntas con 'she' y el verbo 'work', usamos 'Does'. Con tercera persona singular usamos 'Does'."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+
+        function loadQuestion() {
+            const question = questions[currentQuestion];
+            const container = document.getElementById('questionContainer');
+            
+            container.innerHTML = `
+                <div class="question-container">
+                    <div class="question-header">
+                        <div class="question-number">${currentQuestion + 1}</div>
+                        <div class="question-text">${question.question}</div>
+                    </div>
+                    <div class="options">
+                        ${question.options.map((option, index) => `
+                            <div class="option" onclick="selectOption(${index})">
+                                <div class="option-letter">${String.fromCharCode(65 + index)}</div>
+                                <div>${option}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="hint" id="hint">
+                        <span class="hint-icon">💡</span>
+                        ${question.hint}
+                    </div>
+                    <button class="next-btn" id="nextBtn" onclick="nextQuestion()" disabled>
+                        ${currentQuestion === questions.length - 1 ? 'Ver Resultados' : 'Siguiente Pregunta'}
+                    </button>
+                </div>
+            `;
+            
+            answered = false;
+            updateProgress();
+        }
+
+        function selectOption(selectedIndex) {
+            if (answered) return;
+            
+            const question = questions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            const hint = document.getElementById('hint');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            answered = true;
+            
+            options.forEach((option, index) => {
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                } else if (index === selectedIndex) {
+                    option.classList.add('incorrect');
+                    option.classList.add('selected');
+                }
+                option.style.cursor = 'default';
+            });
+            
+            if (selectedIndex === question.correct) {
+                score++;
+                updateScore();
+            } else {
+                hint.classList.add('show');
+            }
+            
+            nextBtn.disabled = false;
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                showFinalScore();
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function updateScore() {
+            const scoreElement = document.getElementById('score');
+            scoreElement.textContent = `Puntuación: ${score}/${questions.length}`;
+            
+            if (score / questions.length >= 0.7) {
+                scoreElement.classList.add('score-good');
+                scoreElement.classList.remove('score-bad');
+            } else {
+                scoreElement.classList.add('score-bad');
+                scoreElement.classList.remove('score-good');
+            }
+        }
+
+        function showFinalScore() {
+            document.getElementById('questionContainer').style.display = 'none';
+            document.getElementById('finalScore').style.display = 'block';
+            
+            const percentage = (score / questions.length) * 100;
+            let message = '';
+            
+            if (percentage >= 90) {
+                message = `¡Excelente! ${score}/${questions.length} (${percentage.toFixed(1)}%)`;
+            } else if (percentage >= 70) {
+                message = `¡Bien hecho! ${score}/${questions.length} (${percentage.toFixed(1)}%)`;
+            } else if (percentage >= 50) {
+                message = `Puedes mejorar. ${score}/${questions.length} (${percentage.toFixed(1)}%)`;
+            } else {
+                message = `Necesitas estudiar más. ${score}/${questions.length} (${percentage.toFixed(1)}%)`;
+            }
+            
+            document.getElementById('finalScoreText').textContent = message;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            answered = false;
+            
+            document.getElementById('questionContainer').style.display = 'block';
+            document.getElementById('finalScore').style.display = 'none';
+            document.getElementById('score').textContent = 'Puntuación: 0/10';
+            document.getElementById('score').classList.remove('score-good', 'score-bad');
+            
+            loadQuestion();
+        }
+
+        // Inicializar el examen
+        loadQuestion();
+    </script>
+</body>
+</html>
